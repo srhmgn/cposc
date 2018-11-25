@@ -1,7 +1,31 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/node-apis/
- */
+const path = require(`path`)
 
-// You can delete this file if you're not using it
+exports.createPages = ({ graphql, actions }) => {
+    const { createPage } = actions
+    return new Promise((resolve) => {
+        graphql(`
+            {
+                allContentfulContentPage {
+                    edges {
+                        node {
+                            slug
+                        }
+                    }
+                }
+            }
+        `).then(result => {
+            const contentPageTemplate = path.resolve(`./src/templates/content-page.js`)
+            result.data.allContentfulContentPage.edges.forEach(({ node }) => {
+                createPage({
+                    path: `/${node.slug}`,
+                    component: contentPageTemplate,
+                    context: {
+                        slug: node.slug
+                    }
+                })
+            })
+
+            resolve()
+        })
+    })
+}
