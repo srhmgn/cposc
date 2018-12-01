@@ -1,6 +1,7 @@
 import React from 'react'
 import {graphql} from 'gatsby';
 
+import Layout from '../components/layout';
 import Event from '../components/event';
 import Link from '../components/link';
 
@@ -30,7 +31,7 @@ export const pageQuery = graphql`
 `
 
 export default ({ data: { contentfulContentPage } }) => (
-    <div>
+    <Layout>
         <h1>{contentfulContentPage.title}</h1>
         {contentfulContentPage.modules.map((module, i) => {
             switch (module.__typename) {
@@ -42,6 +43,6 @@ export default ({ data: { contentfulContentPage } }) => (
                     return null
             }
         })}
-    </div>
+    </Layout>
 )
 
